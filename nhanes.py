@@ -22,7 +22,7 @@ class FeatureColumn:
         self.cost = cost
 
 class NHANES:
-    def __init__(self, db_path, columns):
+    def __init__(self, db_path=None, columns=None):
         self.db_path = db_path
         self.columns = columns # Depricated
         self.dataset = None # Depricated
@@ -44,7 +44,7 @@ class NHANES:
             df_col = []
             for dfile in data_files:
                 print(80*' ', end='\r')
-                print('Processing: ' + dfile.split('/')[-1], end='\r')
+                print('\rProcessing: ' + dfile.split('/')[-1], end='')
                 # read the file
                 if dfile in cache:
                     df_tmp = cache[dfile]
@@ -116,6 +116,8 @@ class NHANES:
                     continue
                 # read file columns and index them
                 df.set_index('SEQN', drop=True, inplace=True)
+                if not df.index.is_unique:
+                    continue
                 for col in df.columns:
                     # if the column is not cached ever
                     if col not in self.column_data:
@@ -131,7 +133,10 @@ class NHANES:
                             [self.column_data[col], df.loc[:,[col]]],
                             axis=0, verify_integrity=False)
                         # ignore duplicates
-                        self.column_data[col] = self.column_data[col].groupby(level=0).last()            
+                        #if not self.column_data[col].index.is_unique:
+                        #    pdb.set_trace()
+                        #self.column_data[col] = self.column_data[col].groupby(level=0).last()            
+                        self.column_data[col] = self.column_data[col][~self.column_data[col].index.duplicated(keep=False)]
         # store/update cache file
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
         print('\rStoring to cache:', cache_path)
@@ -186,7 +191,7 @@ class NHANES:
             np.nan_to_num(xx, copy=False)
             try:
                 mu_info = sklearn.feature_selection.mutual_info_classif(
-                    xx[:,1].reshape(-1, 1), xx[:,1].ravel().astype(np.int))
+                    xx[:,1].reshape(-1, 1), xx[:,0].ravel().astype(np.int))
                 #mu_info = np.abs(scipy.stats.pearsonr(xx[:,0], xx[:,1])[0])
                 #print(mu_info)
             except:
@@ -244,9 +249,23 @@ class NHANES:
             raise NotImplementedError
         return
     
+    def save_supervised(self, filename):
+        save_dict = {'df_features':self.df_features, 
+                     'df_targets':self.df_targets, 
+                     'costs':self.costs}
+        with open(filename, 'wb+') as f:
+            pickle.dump(save_dict, f)
+            
+    def load_supervised(self, filename):
+        with open(filename, 'rb') as f:
+            load_dict = pickle.load(f)
+        self.df_features = load_dict['df_features']
+        self.df_targets = load_dict['df_targets']
+        self.costs = load_dict['costs']
+    
     def get_distribution(self, phase, balanced=True):
-        features = self.df_features.as_matrix()
-        targets = self.df_targets.as_matrix()
+        features = self.df_features.values
+        targets = self.df_targets.values
         # check the phase
         inds_tst = np.arange(1,features.shape[0]*0.15, dtype=np.int)
         inds_val = np.arange(features.shape[0]*0.15, 
@@ -383,8 +402,8 @@ class Dataset():
         columns = [
             # TARGET: Fasting Glucose
             FeatureColumn('Laboratory', 'LBXGLU', 
-                              preproc_dropna, None),   
-                              #preproc_impute, None),
+                              #preproc_dropna, None),   
+                              preproc_impute, None),
             # Gender
             FeatureColumn('Demographics', 'RIAGENDR', 
                                  preproc_real, None, cost=1),

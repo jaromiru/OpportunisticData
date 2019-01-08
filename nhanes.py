@@ -235,15 +235,15 @@ class NHANES:
         # set feature costs
         sheet = dfile.split('/')[-2]
         if sheet == 'Demographics':
-            self.column_info[col]['cost'] = 1.0
+            self.column_info[col]['cost'] = 2.0
         elif sheet == 'Dietary':
-            self.column_info[col]['cost'] = 5.0
+            self.column_info[col]['cost'] = 4.0
         elif sheet == 'Examination':
-            self.column_info[col]['cost'] = 10.0
-        elif sheet == 'Questionnaire':
             self.column_info[col]['cost'] = 5.0
+        elif sheet == 'Questionnaire':
+            self.column_info[col]['cost'] = 4.0
         elif sheet == 'Laboratory':
-            self.column_info[col]['cost'] = 100.0
+            self.column_info[col]['cost'] = 9.0
         else:
             raise NotImplementedError
         return

@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import sklearn.feature_selection
 
-
 class FeatureColumn:
     def __init__(self, category, field, preprocessor, args=None, cost=None):
         self.category = category
@@ -495,6 +494,119 @@ class Dataset():
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
         # extract feature and target
+        features = df.loc[:, df.columns != 'LBXGLU'].as_matrix()
+        targets_LBXGLU = df['LBXGLU'].as_matrix()
+        targets = np.zeros(targets_LBXGLU.shape[0])
+        targets[targets_LBXGLU <= 100] = 0
+        targets[np.logical_and(targets_LBXGLU<125,targets_LBXGLU>100)] = 1
+        targets[targets_LBXGLU >= 125] = 2
+        # random permutation
+        perm = np.random.permutation(targets.shape[0])
+        self.features = features[perm]
+        self.targets = targets[perm]
+        self.costs = [c.cost for c in columns[1:]]
+        self.costs = np.array(
+            [item for sublist in self.costs for item in sublist])
+        
+        
+    def load_hypertension(self, opts=None):
+        columns = [
+            # TARGET: systolic BP average
+            FeatureColumn('Examination', 'BPXSAR',
+                             preproc_dropna, None, cost=5)
+            # Gender
+            FeatureColumn('Demographics', 'RIAGENDR', 
+                                 preproc_real, None, cost=2),
+            # Age at time of screening
+            FeatureColumn('Demographics', 'RIDAGEYR', 
+                                 preproc_real, None, cost=2),
+            FeatureColumn('Demographics', 'RIDRETH3', 
+                                 preproc_onehot, None, cost=2),
+            # Race/ethnicity
+            FeatureColumn('Demographics', 'RIDRETH1', 
+                                 preproc_onehot, None, cost=2),
+            # Annual household income
+            FeatureColumn('Demographics', 'INDHHINC', 
+                                 preproc_real, {'cutoff':11}, cost=4),
+            # Education level
+            FeatureColumn('Demographics', 'DMDEDUC2', 
+                                 preproc_real, {'cutoff':5}, cost=2),
+            # Sodium eaten day before
+            FeatureColumn('Dietary', 'DR2TSODI', 
+                             preproc_real, {'cutoff':20683}, cost=4),
+            # BMI
+            FeatureColumn('Examination', 'BMXBMI', 
+                                 preproc_real, None, cost=5),
+            # Waist
+            FeatureColumn('Examination', 'BMXWAIST', 
+                                 preproc_real, None, cost=5),
+            # Height
+            FeatureColumn('Examination', 'BMXHT', 
+                                 preproc_real, None, cost=5),
+            # Upper Leg Length
+            FeatureColumn('Examination', 'BMXLEG', 
+                                 preproc_real, None, cost=5),
+            # Weight
+            FeatureColumn('Examination', 'BMXWT', 
+                                 preproc_real, None, cost=5),
+            # Total Cholesterol
+            FeatureColumn('Laboratory', 'LBXTC', 
+                                 preproc_real, None, cost=9),
+            # Triglyceride
+            FeatureColumn('Laboratory', 'LBXTR', 
+                                 preproc_real, None, cost=9),
+            # fibrinogen
+            FeatureColumn('Laboratory', 'LBXFB', 
+                                 preproc_real, None, cost=9),
+            # LDL-cholesterol
+            FeatureColumn('Laboratory', 'LBDLDL', 
+                                 preproc_real, None, cost=9),
+            # Alcohol consumption
+            FeatureColumn('Questionnaire', 'ALQ101', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'ALQ120Q', 
+                                 preproc_real, {'cutoff':365}, cost=4),
+            # Vigorous work activity
+            FeatureColumn('Questionnaire', 'PAQ605', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'PAQ620', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'PAQ180', 
+                                 preproc_real, {'cutoff':4}, cost=4),
+            # Sleep
+            FeatureColumn('Questionnaire', 'SLD010H', 
+                                 preproc_real, {'cutoff':12}, cost=4),
+            # Smoking
+            FeatureColumn('Questionnaire', 'SMQ020', 
+                                 preproc_onehot, None, cost=4),
+            FeatureColumn('Questionnaire', 'SMD030', 
+                                 preproc_real, {'cutoff':72}, cost=4),
+            # Blood relatives have hypertension/stroke
+            FeatureColumn('Questionnaire', 'MCQ250F', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+        ]
+        nhanes_dataset = NHANES(self.data_path, columns)
+        df = nhanes_dataset.process()
+        # extract feature and target
+        # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
+        # above 140/90 is hypertension 
+        bins = [90, 120, 140] # Bins if target is systolic BP
+        targetn = "BPXSAR"
+        fe_cols = df.drop([targetn], axis=1)
+        features = fe_cols.as_matrix()
+        target = df[targetn].as_matrix()
+        # remove nan labeled samples
+        inds_valid = ~ np.isnan(target)
+        features = features[inds_valid]
+        target = target[inds_valid]
+
+        # Put each person in the corresponding bin
+        targets = np.zeros(target.shape[0])
+        targets[target <= bins[0]] = 0
+        targets[np.logical_and(target<bins[0],target>bins[1])] = 1
+        targets[np.logical_and(target<bins[1],target>bins[2])] = 2
+        targets[target >= bins[2]] = 3
+
         features = df.loc[:, df.columns != 'LBXGLU'].as_matrix()
         targets_LBXGLU = df['LBXGLU'].as_matrix()
         targets = np.zeros(targets_LBXGLU.shape[0])

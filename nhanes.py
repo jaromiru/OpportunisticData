@@ -508,12 +508,11 @@ class Dataset():
         self.costs = np.array(
             [item for sublist in self.costs for item in sublist])
         
-        
     def load_hypertension(self, opts=None):
         columns = [
             # TARGET: systolic BP average
             FeatureColumn('Examination', 'BPXSAR',
-                             preproc_dropna, None, cost=5)
+                             preproc_dropna, None, cost=5),
             # Gender
             FeatureColumn('Demographics', 'RIAGENDR', 
                                  preproc_real, None, cost=2),

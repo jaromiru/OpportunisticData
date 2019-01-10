@@ -612,105 +612,105 @@ class Dataset():
             [item for sublist in self.costs for item in sublist])
     
     def load_arthritis(self, opts=None):
-    columns = [
-        # TARGET: systolic BP average
-        FeatureColumn('Questionnaire', 'MCQ160A', 
-                                None, None, cost=4),
-        # Gender
-        FeatureColumn('Demographics', 'RIAGENDR', 
-                             preproc_real, None, cost=2),
-        # Age at time of screening
-        FeatureColumn('Demographics', 'RIDAGEYR', 
-                             preproc_real, None, cost=2),
-        FeatureColumn('Demographics', 'RIDRETH3', 
-                             preproc_onehot, None, cost=2),
-        # Race/ethnicity
-        FeatureColumn('Demographics', 'RIDRETH1', 
-                             preproc_onehot, None, cost=2),
-        # Annual household income
-        FeatureColumn('Demographics', 'INDHHINC', 
-                             preproc_real, {'cutoff':11}, cost=4),
-        # Education level
-        FeatureColumn('Demographics', 'DMDEDUC2', 
-                             preproc_real, {'cutoff':5}, cost=2),
-        # BMI
-        FeatureColumn('Examination', 'BMXBMI', 
-                             preproc_real, None, cost=5),
-        # Waist
-        FeatureColumn('Examination', 'BMXWAIST', 
-                             preproc_real, None, cost=5),
-        # Height
-        FeatureColumn('Examination', 'BMXHT', 
-                             preproc_real, None, cost=5),
-        # Upper Leg Length
-        FeatureColumn('Examination', 'BMXLEG', 
-                             preproc_real, None, cost=5),
-        # Weight
-        FeatureColumn('Examination', 'BMXWT', 
-                             preproc_real, None, cost=5),
-        # Total Cholesterol
-        FeatureColumn('Laboratory', 'LBXTC', 
-                             preproc_real, None, cost=9),
-        # Alcohol consumption
-        FeatureColumn('Questionnaire', 'ALQ101', 
-                             preproc_real, {'cutoff':2}, cost=4),
-        FeatureColumn('Questionnaire', 'ALQ120Q', 
-                             preproc_real, {'cutoff':365}, cost=4),
-        # Vigorous work activity
-        FeatureColumn('Questionnaire', 'PAQ605', 
-                             preproc_real, {'cutoff':2}, cost=4),
-        FeatureColumn('Questionnaire', 'PAQ620', 
-                             preproc_real, {'cutoff':2}, cost=4),
-        FeatureColumn('Questionnaire', 'PAQ180', 
-                             preproc_real, {'cutoff':4}, cost=4),
-        FeatureColumn('Questionnaire', 'PAD615', 
-                             preproc_real, {'cutoff':780}, cost=4),
-        # Doctor told overweight (risk factor)
-        FeatureColumn('Questionnaire', 'MCQ160J', 
-                             preproc_onehot, {'cutoff':2}, cost=4),
-        # Sleep
-        FeatureColumn('Questionnaire', 'SLD010H', 
-                             preproc_real, {'cutoff':12}, cost=4),
-        # Smoking
-        FeatureColumn('Questionnaire', 'SMQ020', 
-                             preproc_onehot, None, cost=4),
-        FeatureColumn('Questionnaire', 'SMD030', 
-                             preproc_real, {'cutoff':72}, cost=4),
-        # Blood relatives with arthritis
-        FeatureColumn('Questionnaire', 'MCQ250D',
-                             preproc_onehot, {'cutoff':2}, cost=4),
-        # joint pain/aching/stiffness in past year
-        FeatureColumn('Questionnaire', 'MPQ010',
-                             preproc_onehot, {'cutoff':2}, cost=4),
-        # symptoms began only because of injury
-        FeatureColumn('Questionnaire', 'MPQ030',
-                             preproc_onehot, {'cutoff':2}, cost=4),
-        # how long experiencing pain
-        FeatureColumn('Questionnaire', 'MPQ110',
-                             preproc_real, {'cutoff':4}, cost=4),
-    ]
-    nhanes_dataset = NHANES(self.data_path, columns)
-    df = nhanes_dataset.process()
-    fe_cols = df.drop(['MCQ160A'], axis=1)
-    features = fe_cols.as_matrix()
-    target = df['MCQ160A'].as_matrix()
-    # remove nan labeled samples
-    inds_valid = ~ np.isnan(target)
-    features = features[inds_valid]
-    target = target[inds_valid]
+        columns = [
+            # TARGET: systolic BP average
+            FeatureColumn('Questionnaire', 'MCQ160A', 
+                                    None, None, cost=4),
+            # Gender
+            FeatureColumn('Demographics', 'RIAGENDR', 
+                                 preproc_real, None, cost=2),
+            # Age at time of screening
+            FeatureColumn('Demographics', 'RIDAGEYR', 
+                                 preproc_real, None, cost=2),
+            FeatureColumn('Demographics', 'RIDRETH3', 
+                                 preproc_onehot, None, cost=2),
+            # Race/ethnicity
+            FeatureColumn('Demographics', 'RIDRETH1', 
+                                 preproc_onehot, None, cost=2),
+            # Annual household income
+            FeatureColumn('Demographics', 'INDHHINC', 
+                                 preproc_real, {'cutoff':11}, cost=4),
+            # Education level
+            FeatureColumn('Demographics', 'DMDEDUC2', 
+                                 preproc_real, {'cutoff':5}, cost=2),
+            # BMI
+            FeatureColumn('Examination', 'BMXBMI', 
+                                 preproc_real, None, cost=5),
+            # Waist
+            FeatureColumn('Examination', 'BMXWAIST', 
+                                 preproc_real, None, cost=5),
+            # Height
+            FeatureColumn('Examination', 'BMXHT', 
+                                 preproc_real, None, cost=5),
+            # Upper Leg Length
+            FeatureColumn('Examination', 'BMXLEG', 
+                                 preproc_real, None, cost=5),
+            # Weight
+            FeatureColumn('Examination', 'BMXWT', 
+                                 preproc_real, None, cost=5),
+            # Total Cholesterol
+            FeatureColumn('Laboratory', 'LBXTC', 
+                                 preproc_real, None, cost=9),
+            # Alcohol consumption
+            FeatureColumn('Questionnaire', 'ALQ101', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'ALQ120Q', 
+                                 preproc_real, {'cutoff':365}, cost=4),
+            # Vigorous work activity
+            FeatureColumn('Questionnaire', 'PAQ605', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'PAQ620', 
+                                 preproc_real, {'cutoff':2}, cost=4),
+            FeatureColumn('Questionnaire', 'PAQ180', 
+                                 preproc_real, {'cutoff':4}, cost=4),
+            FeatureColumn('Questionnaire', 'PAD615', 
+                                 preproc_real, {'cutoff':780}, cost=4),
+            # Doctor told overweight (risk factor)
+            FeatureColumn('Questionnaire', 'MCQ160J', 
+                                 preproc_onehot, {'cutoff':2}, cost=4),
+            # Sleep
+            FeatureColumn('Questionnaire', 'SLD010H', 
+                                 preproc_real, {'cutoff':12}, cost=4),
+            # Smoking
+            FeatureColumn('Questionnaire', 'SMQ020', 
+                                 preproc_onehot, None, cost=4),
+            FeatureColumn('Questionnaire', 'SMD030', 
+                                 preproc_real, {'cutoff':72}, cost=4),
+            # Blood relatives with arthritis
+            FeatureColumn('Questionnaire', 'MCQ250D',
+                                 preproc_onehot, {'cutoff':2}, cost=4),
+            # joint pain/aching/stiffness in past year
+            FeatureColumn('Questionnaire', 'MPQ010',
+                                 preproc_onehot, {'cutoff':2}, cost=4),
+            # symptoms began only because of injury
+            FeatureColumn('Questionnaire', 'MPQ030',
+                                 preproc_onehot, {'cutoff':2}, cost=4),
+            # how long experiencing pain
+            FeatureColumn('Questionnaire', 'MPQ110',
+                                 preproc_real, {'cutoff':4}, cost=4),
+        ]
+        nhanes_dataset = NHANES(self.data_path, columns)
+        df = nhanes_dataset.process()
+        fe_cols = df.drop(['MCQ160A'], axis=1)
+        features = fe_cols.as_matrix()
+        target = df['MCQ160A'].as_matrix()
+        # remove nan labeled samples
+        inds_valid = ~ np.isnan(target)
+        features = features[inds_valid]
+        target = target[inds_valid]
 
-    # Put each person in the corresponding bin
-    targets = np.zeros(target.shape[0])
-    targets[target == 1] = 0 # yes arthritis
-    targets[target == 2] = 1 # no arthritis
+        # Put each person in the corresponding bin
+        targets = np.zeros(target.shape[0])
+        targets[target == 1] = 0 # yes arthritis
+        targets[target == 2] = 1 # no arthritis
 
-   # random permutation
-    perm = np.random.permutation(targets.shape[0])
-    self.features = features[perm]
-    self.targets = targets[perm]
-    self.costs = [c.cost for c in columns[1:]]
-    self.costs = np.array(
-        [item for sublist in self.costs for item in sublist])
+       # random permutation
+        perm = np.random.permutation(targets.shape[0])
+        self.features = features[perm]
+        self.targets = targets[perm]
+        self.costs = [c.cost for c in columns[1:]]
+        self.costs = np.array(
+            [item for sublist in self.costs for item in sublist])
 
 
 

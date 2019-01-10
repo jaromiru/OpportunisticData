@@ -66,7 +66,8 @@ class NHANES:
             try:
                 df_col = pd.concat(df_col)
             except:
-                raise Error('Failed to process' + field)
+                #raise Error('Failed to process' + field)
+                raise Exception('Failed to process' + field)
             df.append(df_col)
         df = pd.concat(df, axis=1)
         #df = pd.merge(df, df_sel, how='outer')
@@ -606,13 +607,7 @@ class Dataset():
         targets[np.logical_and(target<bins[1],target>bins[2])] = 2
         targets[target >= bins[2]] = 3
 
-        features = df.loc[:, df.columns != 'LBXGLU'].as_matrix()
-        targets_LBXGLU = df['LBXGLU'].as_matrix()
-        targets = np.zeros(targets_LBXGLU.shape[0])
-        targets[targets_LBXGLU <= 100] = 0
-        targets[np.logical_and(targets_LBXGLU<125,targets_LBXGLU>100)] = 1
-        targets[targets_LBXGLU >= 125] = 2
-        # random permutation
+       # random permutation
         perm = np.random.permutation(targets.shape[0])
         self.features = features[perm]
         self.targets = targets[perm]

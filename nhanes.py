@@ -587,6 +587,7 @@ class Dataset():
         ]
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
+        df['BPXSAR'].dropna()
         # extract feature and target
         # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
         # above 140/90 is hypertension 

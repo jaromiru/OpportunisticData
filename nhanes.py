@@ -603,8 +603,8 @@ class Dataset():
         # Put each person in the corresponding bin
         targets = np.zeros(target.shape[0])
         targets[target <= bins[0]] = 0
-        targets[np.logical_and(target<bins[0],target>bins[1])] = 1
-        targets[np.logical_and(target<bins[1],target>bins[2])] = 2
+        targets[np.logical_and(target>bins[0],targel<bins[1])] = 1
+        targets[np.logical_and(target>bins[1],target<bins[2])] = 2
         targets[target >= bins[2]] = 3
 
        # random permutation

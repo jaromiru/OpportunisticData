@@ -590,11 +590,9 @@ class Dataset():
         # extract feature and target
         # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
         # above 140/90 is hypertension 
-        bins = [90, 120, 140] # Bins if target is systolic BP
-        targetn = "BPXSAR"
-        fe_cols = df.drop([targetn], axis=1)
+        fe_cols = df.drop(['BPXSAR'], axis=1)
         features = fe_cols.as_matrix()
-        target = df[targetn].as_matrix()
+        target = df['BPXSAR'].as_matrix()
         # remove nan labeled samples
         inds_valid = ~ np.isnan(target)
         features = features[inds_valid]
@@ -602,10 +600,8 @@ class Dataset():
 
         # Put each person in the corresponding bin
         targets = np.zeros(target.shape[0])
-        targets[target <= bins[0]] = 0
-        targets[np.logical_and(target>bins[0],target<bins[1])] = 1
-        targets[np.logical_and(target>bins[1],target<bins[2])] = 2
-        targets[target >= bins[2]] = 3
+        targets[target < 140] = 0
+        targets[target >= 140] = 1
 
        # random permutation
         perm = np.random.permutation(targets.shape[0])

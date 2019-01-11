@@ -520,8 +520,6 @@ class Dataset():
             # Age at time of screening
             FeatureColumn('Demographics', 'RIDAGEYR', 
                                  preproc_real, None, cost=2),
-            FeatureColumn('Demographics', 'RIDRETH3', 
-                                 preproc_onehot, None, cost=2),
             # Race/ethnicity
             FeatureColumn('Demographics', 'RIDRETH1', 
                                  preproc_onehot, None, cost=2),
@@ -587,7 +585,6 @@ class Dataset():
         ]
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
-        df['BPXSAR'].dropna()
         # extract feature and target
         # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
         # above 140/90 is hypertension 

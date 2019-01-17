@@ -2,13 +2,18 @@
 
 ## For a detailed explanation of the methods used here, please refer to: PAPERRRRRRRRRRRRRR 
 
+
 ## File list:
 - **nhanes.py:** implementation of the data preprocessing logic as well as definition of a few example datasets such as diabetes, heart disease, hypertention, etc. classification.
 - **Demo.ipynb:** Jupyter notebook file to demonstrate the basic usage of each example.
 
+
+
 ## How to use:
-1) Download raw data files from: [link]
-(https://drive.google.com/file/d/1hFp7O747408D8t5442f0Sjit7wXKXI1z/view?usp=sharing)
+1) Download [raw data files](https://drive.google.com/file/d/1hFp7O747408D8t5442f0Sjit7wXKXI1z/view?usp=sharing) and decompress them.
+2) Install Python 3 and the following packages: joblib, numpy, pandas, matplotlib, scipy, sklearn, jupyter.
+3) Use Demo.ipynb to see a few examples on how to use the predifined tasks.
+4) Alternatively, you can expand nhanes.py to define new tasks by following the implementation logic of the provided samples.
 
 ## Citation Request
 If you find this dataset prepration code useful, please cite the following papers:

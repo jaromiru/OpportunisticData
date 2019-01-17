@@ -4,7 +4,7 @@
 
 
 ## File list:
-- **nhanes.py:** implementation of the data preprocessing logic as well as definition of a few example datasets such as diabetes, heart disease, hypertention, etc. classification.
+- **nhanes.py:** implementation of the data preprocessing logic as well as definition of a few example datasets such as diabetes, heart disease, hypertention, etc.
 - **Demo.ipynb:** Jupyter notebook file to demonstrate the basic usage of each example.
 
 

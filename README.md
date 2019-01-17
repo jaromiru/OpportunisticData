@@ -7,8 +7,8 @@
 - **Demo.ipynb:** Jupyter notebook file to demonstrate the basic usage of each example.
 
 ## How to use:
-1) Download raw data files from:
-https://drive.google.com/file/d/1hFp7O747408D8t5442f0Sjit7wXKXI1z/view?usp=sharing
+1) Download raw data files from: [link]
+(https://drive.google.com/file/d/1hFp7O747408D8t5442f0Sjit7wXKXI1z/view?usp=sharing)
 
 ## Citation Request
 If you find this dataset prepration code useful, please cite the following papers:

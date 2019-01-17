@@ -12,7 +12,7 @@
 ## How to use:
 1) Download [raw data files](https://drive.google.com/file/d/1hFp7O747408D8t5442f0Sjit7wXKXI1z/view?usp=sharing) and decompress them.
 2) Install Python 3 and the following packages: joblib, numpy, pandas, matplotlib, scipy, sklearn, jupyter.
-3) Use Demo.ipynb to see a few examples on how to use the predifined tasks.
+3) Use Demo.ipynb to see a few examples on how to use the predefined tasks.
 4) Alternatively, you can expand nhanes.py to define new tasks by following the implementation logic of the provided samples.
 
 ## Citation Request

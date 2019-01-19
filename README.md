@@ -1,6 +1,6 @@
 # Source code and dataset for creating cost-sensitive learning benchmarks in health 
 
-## For a detailed explanation of the methods used here, please refer to: PAPERRRRRRRRRRRRRR 
+### For a detailed explanation of the methods used here, please refer to: ["Nutrition and Health Data for Cost-Sensitive Learning"](https://github.com/mkachuee/OpportunisticData/raw/master/Paper.pdf)
 
 
 ## File list:

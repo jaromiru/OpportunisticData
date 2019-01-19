@@ -308,8 +308,8 @@ class NHANES:
             yield (ind, phase_features[ind], phase_targets[ind], self.costs, 1.0)
             
     def get_batch(self, n_size, phase, balanced=True):
-        dataset_features = self.df_features.as_matrix()
-        dataset_targets = self.df_targets.as_matrix()
+        dataset_features = self.df_features.values
+        dataset_targets = self.df_targets.values
         # select indices
         n_samples = dataset_features.shape[0]
         n_classes = int(dataset_targets.max() + 1)
@@ -495,8 +495,8 @@ class Dataset():
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
         # extract feature and target
-        features = df.loc[:, df.columns != 'LBXGLU'].as_matrix()
-        targets_LBXGLU = df['LBXGLU'].as_matrix()
+        features = df.loc[:, df.columns != 'LBXGLU'].values
+        targets_LBXGLU = df['LBXGLU'].values
         targets = np.zeros(targets_LBXGLU.shape[0])
         targets[targets_LBXGLU <= 100] = 0
         targets[np.logical_and(targets_LBXGLU<125,targets_LBXGLU>100)] = 1
@@ -589,8 +589,8 @@ class Dataset():
         # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
         # above 140/90 is hypertension 
         fe_cols = df.drop(['BPXSAR'], axis=1)
-        features = fe_cols.as_matrix()
-        target = df['BPXSAR'].as_matrix()
+        features = fe_cols.values
+        target = df['BPXSAR'].values
         # remove nan labeled samples
         inds_valid = ~ np.isnan(target)
         features = features[inds_valid]
@@ -690,8 +690,8 @@ class Dataset():
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
         fe_cols = df.drop(['MCQ160A'], axis=1)
-        features = fe_cols.as_matrix()
-        target = df['MCQ160A'].as_matrix()
+        features = fe_cols.values
+        target = df['MCQ160A'].values
         # remove nan labeled samples
         inds_valid = ~ np.isnan(target)
         features = features[inds_valid]
